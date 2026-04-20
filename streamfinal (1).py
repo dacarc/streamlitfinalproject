@@ -14,17 +14,15 @@ import os
 
 st.title("Income Analysis Dashboard")
 
-file_path = "/content/IPUMS.csv"
+file_path = "IPUMS.csv"
 
 if not os.path.exists(file_path):
-    st.error("IPUMS.csv not found. Make sure it is in /content/")
+    st.error("IPUMS.csv not found. Make sure it is uploaded to your repo.")
     st.stop()
 
 ipums_df = pd.read_csv(file_path)
 
 x_var = st.selectbox("X axis", ["AGE", "EDUC", "UHRSWORKT"])
-
-st.subheader("Income vs Selected Variable")
 
 fig = px.scatter(ipums_df, x=x_var, y="INCWAGE")
 st.plotly_chart(fig)
