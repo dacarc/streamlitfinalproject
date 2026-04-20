@@ -14,10 +14,11 @@ import os
 
 st.title("Income Analysis Dashboard")
 
+# IMPORTANT: no /content/ here
 file_path = "IPUMS.csv"
 
 if not os.path.exists(file_path):
-    st.error("IPUMS.csv not found. Make sure it is uploaded to your repo.")
+    st.error("IPUMS.csv not found. Make sure it is in the repo.")
     st.stop()
 
 ipums_df = pd.read_csv(file_path)
