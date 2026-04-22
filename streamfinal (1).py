@@ -10,20 +10,34 @@ Original file is located at
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import os
 
-st.title("Income Analysis Dashboard")
+st.title("Income and Work Analysis")
 
-# IMPORTANT: no /content/ here
-file_path = "IPUMS.csv"
+df = pd.read_csv("IPUMS.csv")
 
-if not os.path.exists(file_path):
-    st.error("IPUMS.csv not found. Make sure it is in the repo.")
-    st.stop()
+df['TELWRKPAY'] = df['TELWRKPAY'].fillna(0)
 
-ipums_df = pd.read_csv(file_path)
+df = df[df['INCWAGE'] < 99999999]
+df = df[df['WKSWORK1'] > 0]
+df = df[(df['UHRSWORKT'] > 0) & (df['UHRSWORKT'] < 997)]
 
-x_var = st.selectbox("X axis", ["AGE", "EDUC", "UHRSWORKT"])
+df['HourlyEfficiency'] = df['INCWAGE'] / (df['WKSWORK1'] * df['UHRSWORKT'])
 
-fig = px.scatter(ipums_df, x=x_var, y="INCWAGE")
-st.plotly_chart(fig)
+telework_option = st.selectbox("Telework Pay (0 = No, 1 = Yes)", [0, 1])
+
+df = df[df['TELWRKPAY'] == telework_option]
+
+st.subheader("Average Income by Age")
+
+income_age = df.groupby("AGE")["INCWAGE"].mean().reset_index()
+
+fig1 = px.line(income_age, x="AGE", y="INCWAGE")
+st.plotly_chart(fig1)
+
+st.subheader("Hourly Efficiency Distribution")
+
+fig2 = px.histogram(df, x="HourlyEfficiency", nbins=30)
+st.plotly_chart(fig2)
+
+st.write("Number of rows:", df.shape[0])
+st.write("Average income:", round(df["INCWAGE"].mean(), 2))
