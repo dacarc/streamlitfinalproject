@@ -27,7 +27,7 @@ telework_option = st.selectbox("Telework Pay (0 = No, 1 = Yes)", [0, 1])
 
 df = df[df['TELWRKPAY'] == telework_option]
 
-st.subheader("Average Income by Age")
+st.subheader("Average Income by Age :) ")
 
 income_age = df.groupby("AGE")["INCWAGE"].mean().reset_index()
 
