@@ -7,7 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1MOyD6gj7-Ly7Zt33MXmhD6g_Nizg6I9a
 """
 
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -22,6 +21,7 @@ df = df[df['INCWAGE'] < 99999999]
 df = df[df['WKSWORK1'] > 0]
 df = df[(df['UHRSWORKT'] > 0) & (df['UHRSWORKT'] < 997)]
 
+# Create new variable
 df['HourlyEfficiency'] = df['INCWAGE'] / (df['WKSWORK1'] * df['UHRSWORKT'])
 
 telework_option = st.selectbox("Telework Pay (0 = No, 1 = Yes)", [0, 1])
@@ -40,5 +40,6 @@ st.subheader("Hourly Efficiency Distribution")
 fig2 = px.histogram(df, x="HourlyEfficiency", nbins=30)
 st.plotly_chart(fig2)
 
+# ---------------- STATS ----------------
 st.write("Number of rows:", df.shape[0])
-st.write("Average income:", round(df["INCWAGE"].mean(), 2))lyEfficiency'].mean(), 2):,.2f}")
+st.write("Average income:", round(df["INCWAGE"].mean(), 2))
