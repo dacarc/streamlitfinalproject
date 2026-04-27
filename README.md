@@ -1,11 +1,11 @@
 # 📊 Income & Work Analysis Dashboard
 
-## 🌐 Live App
+## Live App
 👉 https://income-work-analysis.streamlit.app
 
 ---
 
-## 📌 Overview
+## Overview
 
 Interactive Streamlit dashboard analyzing income and work patterns using IPUMS survey data.
 
@@ -13,7 +13,7 @@ The project explores how income varies by age and how work efficiency differs ac
 
 ---
 
-## 🛠️ Tools Used
+## Tools Used
 - Python  
 - Streamlit  
 - Pandas  
@@ -21,7 +21,7 @@ The project explores how income varies by age and how work efficiency differs ac
 
 ---
 
-## 📊 Key Features
+## Key Features
 - Interactive filters for telework status  
 - Income trends by age visualization  
 - Hourly efficiency distribution analysis  
@@ -29,5 +29,5 @@ The project explores how income varies by age and how work efficiency differs ac
 
 ---
 
-## 👤 Author
+## Author
 Diego Carcamo – Data Analytics (VCU)
