@@ -11,35 +11,48 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.title("Income and Work Analysis")
+# Configure page settings for a wider layout
+st.set_page_config(layout="wide")
+
+st.title("Income and Work Analysis Application")
+st.markdown("""
+This interactive application explores income and work efficiency based on various demographic and employment factors. 
+Use the filters below to refine the dataset and observe the impact on average income and hourly efficiency distributions.
+""")
 
 df = pd.read_csv("IPUMS.csv")
 
+# Data Cleaning and Preparation
 df['TELWRKPAY'] = df['TELWRKPAY'].fillna(0)
 
 df = df[df['INCWAGE'] < 99999999]
 df = df[df['WKSWORK1'] > 0]
 df = df[(df['UHRSWORKT'] > 0) & (df['UHRSWORKT'] < 997)]
 
-# Create new variable
 df['HourlyEfficiency'] = df['INCWAGE'] / (df['WKSWORK1'] * df['UHRSWORKT'])
 
-telework_option = st.selectbox("Telework Pay (0 = No, 1 = Yes)", [0, 1])
+st.sidebar.header("Filter Options")
+telework_option = st.sidebar.selectbox("Telework Pay (0 = No, 1 = Yes)", [0, 1], help="Filter data based on whether individuals receive telework pay.")
 
 df = df[df['TELWRKPAY'] == telework_option]
 
-st.subheader("Average Income by Age :) ")
+st.subheader("Analysis Results")
 
-income_age = df.groupby("AGE")["INCWAGE"].mean().reset_index()
+# Create columns for layout if desired, otherwise stack them
+col1, col2 = st.columns(2)
 
-fig1 = px.line(income_age, x="AGE", y="INCWAGE")
-st.plotly_chart(fig1)
+with col1:
+    st.markdown("### Average Income by Age Group")
+    income_age = df.groupby("AGE")["INCWAGE"].mean().reset_index()
+    fig1 = px.line(income_age, x="AGE", y="INCWAGE", title="Average Income by Age")
+    st.plotly_chart(fig1)
 
-st.subheader("Hourly Efficiency Distribution")
+with col2:
+    st.markdown("### Hourly Efficiency Distribution")
+    fig2 = px.histogram(df, x="HourlyEfficiency", nbins=30, title="Distribution of Hourly Efficiency")
+    st.plotly_chart(fig2)
 
-fig2 = px.histogram(df, x="HourlyEfficiency", nbins=30)
-st.plotly_chart(fig2)
-
-# ---------------- STATS ----------------
-st.write("Number of rows:", df.shape[0])
-st.write("Average income:", round(df["INCWAGE"].mean(), 2))
+with st.expander("View Data Summary"):
+    st.write(f"**Number of rows after filtering:** {df.shape[0]}")
+    st.write(f"**Average income after filtering:** ${round(df['INCWAGE'].mean(), 2):,.2f}")
+    st.write(f"**Average hourly efficiency after filtering:** {round(df['HourlyEfficiency'].mean(), 2):,.2f}")
