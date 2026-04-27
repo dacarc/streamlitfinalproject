@@ -11,49 +11,91 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Configure page settings for a wider layout
-st.set_page_config(layout="wide")
+# ---------------- PAGE CONFIG ----------------
+st.set_page_config(
+    page_title="Income & Work Analysis Dashboard",
+    layout="wide"
+)
 
-st.title("Income and Work Analysis Application")
+# ---------------- TITLE ----------------
+st.title("📊 Income & Work Analysis Dashboard")
+
 st.markdown("""
-This interactive application explores income and work efficiency based on various demographic and employment factors. 
-Use the filters below to refine the dataset and observe the impact on average income and hourly efficiency distributions.
+This interactive dashboard explores income and work patterns using demographic and employment data.
+
+Use the filter on the left to compare telework and non-telework employees and explore how income and efficiency change.
 """)
 
+# ---------------- LOAD DATA ----------------
 df = pd.read_csv("IPUMS.csv")
 
-# Data Cleaning and Preparation
+# ---------------- CLEAN DATA ----------------
 df['TELWRKPAY'] = df['TELWRKPAY'].fillna(0)
-
 df = df[df['INCWAGE'] < 99999999]
 df = df[df['WKSWORK1'] > 0]
 df = df[(df['UHRSWORKT'] > 0) & (df['UHRSWORKT'] < 997)]
 
+# ---------------- FEATURE ENGINEERING ----------------
 df['HourlyEfficiency'] = df['INCWAGE'] / (df['WKSWORK1'] * df['UHRSWORKT'])
 
-st.sidebar.header("Filter Options")
-telework_option = st.sidebar.selectbox("Telework Pay (0 = No, 1 = Yes)", [0, 1], help="Filter data based on whether individuals receive telework pay.")
+# ---------------- SIDEBAR FILTER ----------------
+st.sidebar.header("Filters")
+
+telework_option = st.sidebar.selectbox(
+    "Telework Status",
+    [0, 1],
+    format_func=lambda x: "No Telework Pay" if x == 0 else "Receives Telework Pay"
+)
 
 df = df[df['TELWRKPAY'] == telework_option]
 
-st.subheader("Analysis Results")
+# ---------------- KPI METRICS ----------------
+st.subheader("📌 Key Insights")
 
-# Create columns for layout if desired, otherwise stack them
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Total Observations", len(df))
+col2.metric("Average Income", f"${df['INCWAGE'].mean():,.0f}")
+col3.metric("Avg Hourly Efficiency", f"{df['HourlyEfficiency'].mean():.2f}")
+
+st.divider()
+
+# ---------------- VISUALIZATIONS ----------------
 col1, col2 = st.columns(2)
 
+# -------- PLOT 1 --------
 with col1:
-    st.markdown("### Average Income by Age Group")
+    st.markdown("### 📈 Average Income by Age")
+
     income_age = df.groupby("AGE")["INCWAGE"].mean().reset_index()
-    fig1 = px.line(income_age, x="AGE", y="INCWAGE", title="Average Income by Age")
-    st.plotly_chart(fig1)
 
+    fig1 = px.line(
+        income_age,
+        x="AGE",
+        y="INCWAGE",
+        title="Income Trends by Age"
+    )
+
+    st.plotly_chart(fig1, use_container_width=True)
+
+# -------- PLOT 2 --------
 with col2:
-    st.markdown("### Hourly Efficiency Distribution")
-    fig2 = px.histogram(df, x="HourlyEfficiency", nbins=30, title="Distribution of Hourly Efficiency")
-    st.plotly_chart(fig2)
+    st.markdown("### 📊 Hourly Efficiency Distribution")
 
-with st.expander("View Data Summary"):
-    st.write(f"**Number of rows after filtering:** {df.shape[0]}")
-    st.write(f"**Average income after filtering:** ${round(df['INCWAGE'].mean(), 2):,.2f}")
-    st.write(f"**Average hourly efficiency after filtering:** {round(df['HourlyEfficiency'].mean(), 2):,.2f}")
+    fig2 = px.histogram(
+        df,
+        x="HourlyEfficiency",
+        nbins=30,
+        title="Distribution of Work Efficiency"
+    )
+
+    st.plotly_chart(fig2, use_container_width=True)
+
+st.divider()
+
+# ---------------- SUMMARY ----------------
+with st.expander("📊 View Summary Statistics"):
+    st.write(f"Number of observations: {len(df)}")
+    st.write(f"Average income: ${df['INCWAGE'].mean():,.2f}")
+    st.write(f"Average hourly efficiency: {df['HourlyEfficiency'].mean():.2f}")
     
