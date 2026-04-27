@@ -1,33 +1,3 @@
-# Income & Work Analysis Dashboard
+This project is an interactive data dashboard built with Streamlit that analyzes income and work patterns using IPUMS survey data. It allows users to explore how income varies by age and how work efficiency differs across telework and non-telework employees.
 
-## Live App
-  https://income-work-analysis.streamlit.app
-
----
-
-## Overview
-
-Interactive Streamlit dashboard analyzing income and work patterns using IPUMS survey data.
-
-The project explores how income varies by age and how work efficiency differs across telework groups.
-
----
-
-## Tools Used
-- Python  
-- Streamlit  
-- Pandas  
-- Plotly Express  
-
----
-
-## Key Features
-- Interactive filters for telework status  
-- Income trends by age visualization  
-- Hourly efficiency distribution analysis  
-- Real-time dashboard updates  
-
----
-
-## Author
-Diego Carcamo – Data Analytics (VCU)
+The goal of this project is to turn raw labor data into clear, interactive insights that are easy to understand.
