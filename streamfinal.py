@@ -18,7 +18,7 @@ st.set_page_config(
 )
 
 # ---------------- TITLE ----------------
-st.title("📊 Income & Work Analysis Dashboard")
+st.title("Income & Work Analysis Dashboard")
 
 st.markdown("""
 This interactive dashboard explores income and work patterns using demographic and employment data.
@@ -50,7 +50,7 @@ telework_option = st.sidebar.selectbox(
 df = df[df['TELWRKPAY'] == telework_option]
 
 # ---------------- KPI METRICS ----------------
-st.subheader("📌 Key Insights")
+st.subheader(" Key Insights")
 
 col1, col2, col3 = st.columns(3)
 
@@ -65,7 +65,7 @@ col1, col2 = st.columns(2)
 
 # -------- PLOT 1 --------
 with col1:
-    st.markdown("### 📈 Average Income by Age")
+    st.markdown("### Average Income by Age")
 
     income_age = df.groupby("AGE")["INCWAGE"].mean().reset_index()
 
@@ -80,7 +80,7 @@ with col1:
 
 # -------- PLOT 2 --------
 with col2:
-    st.markdown("### 📊 Hourly Efficiency Distribution")
+    st.markdown("### Hourly Efficiency Distribution")
 
     fig2 = px.histogram(
         df,
@@ -94,7 +94,7 @@ with col2:
 st.divider()
 
 # ---------------- SUMMARY ----------------
-with st.expander("📊 View Summary Statistics"):
+with st.expander(" View Summary Statistics"):
     st.write(f"Number of observations: {len(df)}")
     st.write(f"Average income: ${df['INCWAGE'].mean():,.2f}")
     st.write(f"Average hourly efficiency: {df['HourlyEfficiency'].mean():.2f}")
