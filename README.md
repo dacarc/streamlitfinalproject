@@ -1,7 +1,7 @@
-# 📊 Income & Work Analysis Dashboard
+# Income & Work Analysis Dashboard
 
 ## Live App
-👉 https://income-work-analysis.streamlit.app
+  https://income-work-analysis.streamlit.app
 
 ---
 
