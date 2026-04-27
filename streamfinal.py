@@ -56,3 +56,4 @@ with st.expander("View Data Summary"):
     st.write(f"**Number of rows after filtering:** {df.shape[0]}")
     st.write(f"**Average income after filtering:** ${round(df['INCWAGE'].mean(), 2):,.2f}")
     st.write(f"**Average hourly efficiency after filtering:** {round(df['HourlyEfficiency'].mean(), 2):,.2f}")
+    
