@@ -7,6 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1MOyD6gj7-Ly7Zt33MXmhD6g_Nizg6I9a
 """
 
+%%writefile streamlit_app.py
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -56,3 +57,4 @@ with st.expander("View Data Summary"):
     st.write(f"**Number of rows after filtering:** {df.shape[0]}")
     st.write(f"**Average income after filtering:** ${round(df['INCWAGE'].mean(), 2):,.2f}")
     st.write(f"**Average hourly efficiency after filtering:** {round(df['HourlyEfficiency'].mean(), 2):,.2f}")
+
